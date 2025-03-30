@@ -138,10 +138,21 @@ async function startRecording(button) {
 
 function stopRecording(button) {
     button.classList.remove("recording");
+
+    // 🔄 Restore original mic button colors
+    if (button.classList.contains("output-mic")) {
+        button.style.backgroundColor = "#ff8000";
+        button.style.boxShadow = "0 0 10px rgba(255, 128, 0, 0.8)";
+    } else {
+        button.style.backgroundColor = "#0ff";
+        button.style.boxShadow = "0 0 10px rgba(0, 255, 255, 0.5)";
+    }
+
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
     }
 }
+
 
 async function translateText(text, sourceLang, targetLang) {
     try {

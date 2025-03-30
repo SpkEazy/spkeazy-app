@@ -196,7 +196,7 @@ body {
 /* ✅ Gender Dropdown Fix */
 .gender-dropdown {
     position: absolute;
-    top: 225px;
+    top: 275px;
     left: 15px;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(0, 255, 255, 0.3);

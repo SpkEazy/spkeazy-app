@@ -211,6 +211,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputMicButton = document.querySelector(".mic-button:not(.output-mic)");
   const outputMicButton = document.querySelector(".mic-button.output-mic");
 
+  // ✅ Set initial idle state styles
+  inputMicButton.classList.add("input-idle");
+  outputMicButton.classList.add("output-idle");
+
   inputMicButton.addEventListener("click", () => {
     if (inputMicButton.classList.contains("recording")) {
       stopRecording(inputMicButton);
@@ -227,6 +231,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
 
 

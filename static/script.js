@@ -192,3 +192,27 @@ document.addEventListener("click", function (e) {
         menu.style.display = "none";
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inputMicButton = document.querySelector(".mic-button:not(.output-mic)");
+  const outputMicButton = document.querySelector(".mic-button.output-mic");
+
+  inputMicButton.addEventListener("click", () => {
+    if (inputMicButton.classList.contains("recording")) {
+      stopRecording(inputMicButton);
+    } else {
+      startRecording(inputMicButton);
+    }
+  });
+
+  outputMicButton.addEventListener("click", () => {
+    if (outputMicButton.classList.contains("recording")) {
+      stopRecording(outputMicButton);
+    } else {
+      startRecording(outputMicButton);
+    }
+  });
+});
+
+
+

@@ -232,4 +232,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+async function requestMicrophonePermissionEarly() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log("✅ Early microphone permission granted.");
+        stream.getTracks().forEach(track => track.stop());
+    } catch (err) {
+        console.error("❌ Microphone permission blocked or denied on load:", err);
+    }
+}
+
+window.addEventListener("load", requestMicrophonePermissionEarly);
+
+
 

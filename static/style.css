@@ -1,5 +1,11 @@
 /* ✅ Global Styles */
 
+html {
+  color-scheme: light !important;
+  background: #000 !important;
+  color: #fff !important;
+}
+
 /* FORCE your custom design — block dark mode overrides */
 @media (prefers-color-scheme: dark) {
   html, body {

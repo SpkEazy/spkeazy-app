@@ -224,3 +224,16 @@ body {
     text-align: center;
     z-index: 100;
 }
+
+/* 🔁 Restore idle state colors after recording */
+.mic-button.input-idle {
+  background: #0ff !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5) !important;
+}
+
+.mic-button.output-idle {
+  background: #ff8000 !important;
+  box-shadow: 0 0 10px rgba(255, 128, 0, 0.8) !important;
+}
+
+

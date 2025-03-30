@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light only">
-    <meta name="theme-color" content="#000000">
-    <style>
-        html { color-scheme: light !important; }
-     </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Prevent browser/system dark mode -->
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#000000">
+  
+  <!-- Force light mode globally -->
+  <style>
+    html {
+      color-scheme: light !important;
+      background: #000 !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        background-color: #0a0a0a !important;
+        color: #fff !important;
+        filter: none !important;
+      }
+    }
+  </style>
 
-    <title>SpkEazy</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.0">
-
+  <title>SpkEazy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.1">
 </head>
+
 <body>
     <div class="form-container">
         <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Translation App Logo" class="form-image">

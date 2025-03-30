@@ -1,4 +1,29 @@
 /* ✅ Global Styles */
+
+/* FORCE your custom design — block dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+
+  h1, h2, h3, h4, h5, h6, p, span, a, div, button {
+    color: #fff !important;
+    background-color: transparent !important;
+  }
+
+  input, textarea, select, button {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #0ff !important;
+  }
+
+  svg, img {
+    filter: none !important;
+  }
+}
+
+
 * {
     margin: 0;
     padding: 0;

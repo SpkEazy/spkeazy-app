@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpkEazy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2.0">
+
+</head>
+<body>
+    <div class="form-container">
+        <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Translation App Logo" class="form-image">
+        <h2>SpkEazy</h2>
+
+
+        <div class="gender-dropdown" onclick="toggleGenderDropdown()">
+            <span id="selectedGender">Neutral</span>
+            <div class="gender-dropdown-menu">
+                <div onclick="setGender('Male')">Male</div>
+                <div onclick="setGender('Female')">Female</div>
+                <div onclick="setGender('Neutral')">Neutral</div>
+            </div>
+        </div>
+
+        <div class="dropdown" id="inputLanguageDropdown">
+            <div class="selected">
+                <img src="https://flagcdn.com/w40/gb.png" id="inputFlag">
+                <span id="inputLanguageText">English</span>
+            </div>
+            <div class="dropdown-menu">
+                <div data-flag="gb"><img src="https://flagcdn.com/w40/gb.png"> English</div>
+                <div data-flag="ru"><img src="https://flagcdn.com/w40/ru.png"> Russian</div>
+                <div data-flag="ae"><img src="https://flagcdn.com/w40/ae.png"> Arabic</div>
+                <div data-flag="fr"><img src="https://flagcdn.com/w40/fr.png"> French</div>
+                <div data-flag="es"><img src="https://flagcdn.com/w40/es.png"> Spanish</div>
+                <div data-flag="gr"><img src="https://flagcdn.com/w40/gr.png"> Greek</div>
+                <div data-flag="it"><img src="https://flagcdn.com/w40/it.png"> Italian</div>
+                <div data-flag="il"><img src="https://flagcdn.com/w40/il.png"> Hebrew</div>
+                <div data-flag="pt"><img src="https://flagcdn.com/w40/pt.png"> Portuguese</div>
+                <div data-flag="de"><img src="https://flagcdn.com/w40/de.png"> German</div>
+                <div data-flag="nl"><img src="https://flagcdn.com/w40/nl.png"> Dutch</div>
+                <div data-flag="za"><img src="https://flagcdn.com/w40/za.png"> Afrikaans</div>
+                <div data-flag="tw"><img src="https://flagcdn.com/w40/tw.png"> Chinese (Traditional)</div>
+                <div data-flag="cn"><img src="https://flagcdn.com/w40/cn.png"> Chinese (Simplified)</div>
+                <div data-flag="jp"><img src="https://flagcdn.com/w40/jp.png"> Japanese</div>
+                <div data-flag="rs"><img src="https://flagcdn.com/w40/rs.png"> Serbian</div>
+                <div data-flag="hr"><img src="https://flagcdn.com/w40/hr.png"> Croatian</div>
+                <div data-flag="pl"><img src="https://flagcdn.com/w40/pl.png"> Polish</div>
+                <div data-flag="kr"><img src="https://flagcdn.com/w40/kr.png"> Korean</div>
+                <div data-flag="in"><img src="https://flagcdn.com/w40/in.png"> Hindi</div>
+                <div data-flag="tr"><img src="https://flagcdn.com/w40/tr.png"> Turkish</div>
+                <div data-flag="se"><img src="https://flagcdn.com/w40/se.png"> Swedish</div>
+            </div>
+        </div>
+
+        <div class="dropdown" id="outputLanguageDropdown">
+            <div class="selected">
+                <img src="https://flagcdn.com/w40/rs.png" id="outputFlag">
+                <span id="outputLanguageText">Serbian</span>
+            </div>
+            <div class="dropdown-menu">
+                <div data-flag="fr"><img src="https://flagcdn.com/w40/fr.png"> French</div>
+                <div data-flag="es"><img src="https://flagcdn.com/w40/es.png"> Spanish</div>
+                <div data-flag="it"><img src="https://flagcdn.com/w40/it.png"> Italian</div>
+                <div data-flag="ae"><img src="https://flagcdn.com/w40/ae.png"> Arabic</div>
+                <div data-flag="gb"><img src="https://flagcdn.com/w40/gb.png"> English</div>
+                <div data-flag="de"><img src="https://flagcdn.com/w40/de.png"> German</div>
+                <div data-flag="nl"><img src="https://flagcdn.com/w40/nl.png"> Dutch</div>
+                <div data-flag="gr"><img src="https://flagcdn.com/w40/gr.png"> Greek</div>
+                <div data-flag="pt"><img src="https://flagcdn.com/w40/pt.png"> Portuguese</div>
+                <div data-flag="ru"><img src="https://flagcdn.com/w40/ru.png"> Russian</div>
+                <div data-flag="tw"><img src="https://flagcdn.com/w40/tw.png"> Chinese (Traditional)</div>
+                <div data-flag="cn"><img src="https://flagcdn.com/w40/cn.png"> Chinese (Simplified)</div>
+                <div data-flag="il"><img src="https://flagcdn.com/w40/il.png"> Hebrew</div>
+                <div data-flag="rs"><img src="https://flagcdn.com/w40/rs.png"> Serbian</div>
+                <div data-flag="hr"><img src="https://flagcdn.com/w40/hr.png"> Croatian</div>
+                <div data-flag="za"><img src="https://flagcdn.com/w40/za.png"> Afrikaans</div>
+                <div data-flag="kr"><img src="https://flagcdn.com/w40/kr.png"> Korean</div>
+                <div data-flag="jp"><img src="https://flagcdn.com/w40/jp.png"> Japanese</div>
+                <div data-flag="pl"><img src="https://flagcdn.com/w40/pl.png"> Polish</div>
+                <div data-flag="in"><img src="https://flagcdn.com/w40/in.png"> Hindi</div>
+                <div data-flag="tr"><img src="https://flagcdn.com/w40/tr.png"> Turkish</div>
+                <div data-flag="se"><img src="https://flagcdn.com/w40/se.png"> Swedish</div>
+            </div>
+        </div>
+
+        <button class="mic-button" onmousedown="startRecording(this)" onmouseup="stopRecording(this)">
+            <i class="fas fa-microphone"></i>
+        </button>
+
+        <button class="mic-button output-mic" onmousedown="startRecording(this)" onmouseup="stopRecording(this)">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <!-- 🔌 Load Socket.IO client before your script -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

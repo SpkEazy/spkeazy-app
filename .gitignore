@@ -1,0 +1,8 @@
+
+# Ignore the .env file (API Key stays secret)
+.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo

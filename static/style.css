@@ -1,0 +1,183 @@
+/* ✅ Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.form-container {
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 15px;
+    padding: 25px;
+    padding-top: 50px;
+    width: 100%;
+    max-width: 400px;
+    min-height: 90vh;
+    text-align: center;
+    position: relative;
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+}
+
+.form-image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+@keyframes slow-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.form-image.recording {
+    animation: slow-spin 1s linear infinite;
+}
+
+.form-image.slowing {
+    animation: slow-spin 2s linear infinite;
+}
+
+
+/* ✅ Dropdown Fixes (Ensure flags and text are correct) */
+.dropdown {
+    position: relative;
+    width: 80%;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.dropdown .selected {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+}
+
+.dropdown img {
+    width: 24px; /* ✅ Ensure flags are the correct size */
+    height: 16px;
+    margin-right: 10px;
+}
+
+.dropdown .dropdown-menu {
+    position: absolute;
+    width: 100%;
+    background: black;
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.dropdown-menu div {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
+
+.dropdown-menu div:hover {
+    background: rgba(0, 255, 255, 0.2);
+}
+
+/* ✅ Microphone Buttons Fix */
+.mic-button {
+    position: absolute;
+    top: 345px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #0ff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.mic-button i {
+    font-size: 24px;
+    color: #000;
+}
+
+.mic-button.recording {
+  background: red !important;
+  box-shadow: 0 0 15px red !important;
+}
+
+/* Neon orange button for the output field */
+.mic-button.output-mic {
+    top: 410px; /* Adjust this to position it next to the output field */
+    background: #ff8000;
+    box-shadow: 0 0 10px rgba(255, 128, 0, 0.8);
+}
+
+.mic-button.output-mic.recording {
+  background: red !important;
+  box-shadow: 0 0 15px red !important;
+}
+
+
+/* ✅ Gender Dropdown Fix */
+.gender-dropdown {
+    position: absolute;
+    top: 300px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    width: 90px;
+    text-align: center;
+    z-index: 10;
+}
+
+.gender-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    background: black;
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    flex-direction: column;
+    width: 90px;
+    text-align: center;
+    z-index: 100;
+}

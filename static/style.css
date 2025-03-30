@@ -1,4 +1,4 @@
-/* ✅ Global Styles */
+/* ✅ Global Styles (Force light mode, block dark mode filters completely) */
 
 html {
   color-scheme: light !important;
@@ -6,28 +6,40 @@ html {
   color: #fff !important;
 }
 
-/* FORCE your custom design — block dark mode overrides */
+body {
+  background: #0a0a0a !important;
+  color: #fff !important;
+}
+
+/* Force your custom look even in system dark mode */
 @media (prefers-color-scheme: dark) {
   html, body {
-    background-color: #000 !important;
+    background-color: #0a0a0a !important;
     color: #fff !important;
+    filter: none !important;
   }
 
-  h1, h2, h3, h4, h5, h6, p, span, a, div, button {
+  h1, h2, h3, h4, h5, h6, p, span, a, div, button, input, textarea, select {
     color: #fff !important;
     background-color: transparent !important;
+    filter: none !important;
   }
 
-  input, textarea, select, button {
-    background-color: #000 !important;
-    color: #fff !important;
-    border-color: #0ff !important;
+  .mic-button, .mic-button i, .form-image {
+    filter: none !important;
+    color: #000 !important;
   }
 
-  svg, img {
+  img, svg {
     filter: none !important;
   }
 }
+
+/* Fix title (SpkEazy) color to match black background */
+h2 {
+  color: #000 !important;
+}
+
 
 
 * {
@@ -140,7 +152,6 @@ body {
     background: rgba(0, 255, 255, 0.2);
 }
 
-/* ✅ Microphone Buttons Fix */
 .mic-button {
     position: absolute;
     top: 345px;
@@ -148,7 +159,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #0ff;
+    background: #0ff !important;
     border: none;
     cursor: pointer;
     display: flex;
@@ -160,7 +171,7 @@ body {
 
 .mic-button i {
     font-size: 24px;
-    color: #000;
+    color: #000 !important;
 }
 
 .mic-button.recording {
@@ -168,10 +179,10 @@ body {
   box-shadow: 0 0 15px red !important;
 }
 
-/* Neon orange button for the output field */
+/* Neon orange button for output */
 .mic-button.output-mic {
-    top: 410px; /* Adjust this to position it next to the output field */
-    background: #ff8000;
+    top: 410px;
+    background: #ff8000 !important;
     box-shadow: 0 0 10px rgba(255, 128, 0, 0.8);
 }
 
@@ -179,6 +190,7 @@ body {
   background: red !important;
   box-shadow: 0 0 15px red !important;
 }
+
 
 
 /* ✅ Gender Dropdown Fix */

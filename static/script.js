@@ -269,6 +269,15 @@ function testToastOnLoad() {
 
 testToastOnLoad(); // Call this separately, won't interfere with anything else
 
+window.addEventListener("load", () => {
+  const splash = document.getElementById("splash-screen");
+  setTimeout(() => {
+    splash.style.opacity = "0";
+    setTimeout(() => splash.style.display = "none", 800);
+  }, 1500); // You can increase to 2000–3000ms for longer splash
+});
+
+
 
 
 

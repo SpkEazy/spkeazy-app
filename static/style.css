@@ -246,4 +246,72 @@ body {
   background-color: black !important;
 }
 
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 10, 10, 0.9);
+  border: 1px solid #1dd4ff;
+  color: #fff;
+  padding: 1.2rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px #1dd4ff99;
+  z-index: 9999;
+  max-width: 90%;
+  width: 400px;
+  animation: slideUp 0.4s ease-out;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toast-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1dd4ff;
+}
+
+.toast-sub {
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+.toast-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast-btn {
+  background-color: #1dd4ff;
+  color: #000;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.toast-btn:hover {
+  background-color: #0ab8e3;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 30px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
 

@@ -105,17 +105,28 @@
             </div>
         </div>
 
-      <div id="pricing-toast" class="toast-container hidden">
-         <div class="toast-content">
-           <p class="toast-title">🔊 Out of tokens</p>
-           <p class="toast-sub">Choose an upgrade to keep speaking:</p>
-        <div class="toast-buttons">
-           <button onclick="selectPlan('pro')" class="toast-btn">💎 Pro Tier – $9.99/mo</button>
-           <button onclick="selectPlan('topup')" class="toast-btn">⏫ 30-Min Top-Up – $2.99</button>
-           <button onclick="selectPlan('weekend')" class="toast-btn">🎟️ Weekend Pass – $3.99</button>
-     </div>
+<div id="pricing-toast" class="toast-container hidden">
+  <div class="toast-content">
+    <p class="toast-title"><i class="fas fa-volume-up"></i> Out of Tokens</p>
+    <p class="toast-sub">Choose an upgrade to keep speaking:</p>
+
+    <div class="toast-buttons">
+      <button onclick="selectPlan('pro')" class="toast-btn">
+        <i class="fas fa-gem"></i> Pro Tier – $9.99/mo
+      </button>
+      <button onclick="selectPlan('topup')" class="toast-btn">
+        <i class="fas fa-clock"></i> 30-Min Top-Up – $2.99
+      </button>
+      <button onclick="selectPlan('weekend')" class="toast-btn">
+        <i class="fas fa-ticket-alt"></i> Weekend Pass – $3.99
+      </button>
+    </div>
+
+    <p class="toast-note"><i class="fas fa-microphone"></i> Come back tomorrow for more free tokens</p>
   </div>
 </div>
+
+
 
 
         <button class="mic-button">

@@ -260,6 +260,17 @@ function selectPlan(planType) {
   // Later: trigger Android billing, token granting, etc.
 }
 
+// 🧪 TEMPORARY VISUAL TEST FUNCTION
+function testToastOnLoad() {
+  window.addEventListener("load", () => {
+    showPricingToast(); // This will ONLY run visually for now
+  });
+}
+
+testToastOnLoad(); // Call this separately, won't interfere with anything else
+
+
+
 
 
 

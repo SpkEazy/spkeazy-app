@@ -244,5 +244,22 @@ async function requestMicrophonePermissionEarly() {
 
 window.addEventListener("load", requestMicrophonePermissionEarly);
 
+function showPricingToast() {
+  const toast = document.getElementById("pricing-toast");
+  toast.classList.remove("hidden");
+}
+
+function hidePricingToast() {
+  const toast = document.getElementById("pricing-toast");
+  toast.classList.add("hidden");
+}
+
+function selectPlan(planType) {
+  hidePricingToast();
+  alert(`👉 Selected: ${planType.toUpperCase()}`);
+  // Later: trigger Android billing, token granting, etc.
+}
+
+
 
 

@@ -287,18 +287,30 @@ body {
 }
 
 .toast-btn {
-  background-color: #1dd4ff;
-  color: #000;
+  background: linear-gradient(135deg, #00f0ff, #8b5cf6, #ec4899);
+  background-size: 200% 200%;
+  color: #fff;
   padding: 0.6rem 1rem;
   border: none;
   border-radius: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  animation: gradientShift 6s ease infinite;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  transition: transform 0.2s ease;
 }
+
 .toast-btn:hover {
-  background-color: #0ab8e3;
+  transform: scale(1.04);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.7);
 }
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 
 .hidden {
   display: none;

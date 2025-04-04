@@ -3,6 +3,10 @@ let mediaRecorder;
 let audioChunks = [];
 let selectedGender = "Neutral";
 let isOutputMic = false;
+let totalTranscribedTimeSeconds = 0;
+let userIsFree = true; // Track free usage state
+const MAX_FREE_SECONDS = 5 * 60; // 5 minutes = 300 seconds
+
 
 
 window.onload = function () {
@@ -48,34 +52,43 @@ function setGender(gender) {
 }
 
 function setupWebSocket() {
-    socket = io.connect();
+  socket = io.connect();
 
-    socket.on("connect", () => {
-        console.log("✅ WebSocket connected");
-    });
+  socket.on("connect", () => {
+    console.log("✅ WebSocket connected");
+  });
 
-    socket.on("transcription_result", async (data) => {
-      const inputLang = document.getElementById("inputLanguageText").textContent.trim();
-      const outputLang = document.getElementById("outputLanguageText").textContent.trim();
-      const sourceLang = isOutputMic ? outputLang : inputLang;
-      const targetLang = isOutputMic ? inputLang : outputLang;
+  socket.on("transcription_result", async (data) => {
+    const inputLang = document.getElementById("inputLanguageText").textContent.trim();
+    const outputLang = document.getElementById("outputLanguageText").textContent.trim();
+    const sourceLang = isOutputMic ? outputLang : inputLang;
+    const targetLang = isOutputMic ? inputLang : outputLang;
 
-      console.log(`📝 Received transcription: ${data.text}`);
-      console.log(`🔁 Translating from ${sourceLang} → ${targetLang}`);
+    // Estimate usage time: 100 characters ≈ 5 seconds
+    const estimatedSeconds = Math.ceil(data.text.length / 20);
+    totalTranscribedTimeSeconds += estimatedSeconds;
 
-      const translated = await translateText(data.text, sourceLang, targetLang);
+    console.log(`⏱️ Estimated usage: +${estimatedSeconds}s (Total: ${totalTranscribedTimeSeconds}s)`);
 
-        await speakText(translated);
+    if (userIsFree && totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
+      userIsFree = false;
+      showPricingToast(); // 🔥 Show upgrade toast
+      return; // ⛔️ Stop further transcription
+    }
 
-        setTimeout(() => {
-            document.querySelector(".form-image").classList.remove("slowing");
-        }, 1000);
-    });
+    const translated = await translateText(data.text, sourceLang, targetLang);
+    await speakText(translated);
 
-    socket.on("transcription_error", (error) => {
-        console.error("❌ Transcription error:", error);
-    });
+    setTimeout(() => {
+      document.querySelector(".form-image").classList.remove("slowing");
+    }, 1000);
+  });
+
+  socket.on("transcription_error", (error) => {
+    console.error("❌ Transcription error:", error);
+  });
 }
+
 
 async function startRecording(button) {
   isOutputMic = button.classList.contains("output-mic");
@@ -266,14 +279,13 @@ function selectPlan(planType) {
 }
 
 
-// 🧪 TEMPORARY VISUAL TEST FUNCTION
-function testToastOnLoad() {
-  window.addEventListener("load", () => {
-    showPricingToast(); // This will ONLY run visually for now
-  });
+function grantTokensOrResetLimit() {
+  userIsFree = true;
+  totalTranscribedTimeSeconds = 0;
+  hidePricingToast();
+  console.log("✅ Limit reset: user granted access again");
 }
 
-testToastOnLoad(); // Call this separately, won't interfere with anything else
 
 window.addEventListener("load", () => {
   const splash = document.getElementById("splash-screen");

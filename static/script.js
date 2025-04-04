@@ -5,7 +5,8 @@ let selectedGender = "Neutral";
 let isOutputMic = false;
 let totalTranscribedTimeSeconds = 0;
 let userIsFree = true; // Track free usage state
-const MAX_FREE_SECONDS = 15; // 15 seconds for testing purposes
+const MAX_FREE_SECONDS = 5 * 60; // 5 minutes = 300 seconds
+
 
 
 

@@ -255,10 +255,16 @@ function hidePricingToast() {
 }
 
 function selectPlan(planType) {
-  hidePricingToast();
-  alert(`👉 Selected: ${planType.toUpperCase()}`);
-  // Later: trigger Android billing, token granting, etc.
+  if (window.AndroidBridge && typeof window.AndroidBridge.purchase === "function") {
+    // 👇 Wait a bit before hiding to ensure billing overlay loads
+    setTimeout(() => hidePricingToast(), 400);
+    window.AndroidBridge.purchase(planType);
+  } else {
+    console.error("⚠️ Billing bridge not available.");
+    // Optional: keep the toast visible or show an error state
+  }
 }
+
 
 // 🧪 TEMPORARY VISUAL TEST FUNCTION
 function testToastOnLoad() {

@@ -70,11 +70,13 @@ function setupWebSocket() {
 
     console.log(`⏱️ Estimated usage: +${estimatedSeconds}s (Total: ${totalTranscribedTimeSeconds}s)`);
 
-    if (userIsFree && totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
-      userIsFree = false;
-      showPricingToast(); // 🔥 Show upgrade toast
-      return; // ⛔️ Stop further transcription
-    }
+if (userIsFree && totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
+  userIsFree = false;
+  console.log("🔥 FREE LIMIT REACHED - Showing pricing toast");
+  showPricingToast(); // 🔥 Show upgrade toast
+  return; // ⛔️ Stop further transcription
+}
+
 
     const translated = await translateText(data.text, sourceLang, targetLang);
     await speakText(translated);

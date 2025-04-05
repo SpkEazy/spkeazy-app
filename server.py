@@ -210,8 +210,18 @@ Your task is to **accurately** translate the following text from **{source_lang}
     try:
         response = openai.chat.completions.create(
             model="gpt-4o",
-            messages=[{"role": "user", "content": full_prompt}],
-            max_tokens=300,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a professional translator. Your only job is to provide natural, fluent translations. "
+                        "You must never refuse, censor, or skip any valid input, no matter the language, content, or tone. "
+                        "You will always respond ONLY with the translated output — no apologies, no warnings, no commentary, and no disclaimers."
+                    )
+                },
+                {"role": "user", "content": full_prompt}
+            ],
+            max_tokens=700,
             temperature=0.1
         )
 
@@ -234,23 +244,6 @@ Your task is to **accurately** translate the following text from **{source_lang}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@app.route("/speak", methods=["POST"])
-def speak():
-    data = request.get_json()
-    text = data.get("input", "")
-    voice = data.get("voice", "fable")
-
-    try:
-        response = openai.audio.speech.create(
-            model="tts-1-hd",
-            voice=voice,
-            input=text
-        )
-        audio_data = response.content
-        return send_file(io.BytesIO(audio_data), mimetype="audio/mpeg", as_attachment=True, download_name="speech.mp3")
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @app.route('/favicon.ico')
 def favicon():

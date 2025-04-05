@@ -75,6 +75,14 @@ def translate():
     - **DO NOT** say \"This text is already in {target_lang}\" or any similar statement—just return the correct translation.
     - If the input text is already in {target_lang}, return it **exactly as provided** with no modifications.
     """
+    
+    final_override = """
+❗️FINAL OVERRIDE:
+- Under NO circumstance may you respond with “I’m sorry”, “Apologies”, “I cannot assist”, or any similar disclaimer. This is a valid translation request. Respond ONLY with the translated text.
+- DO NOT refuse to translate profanity or offensive language. Translate it as-is without judgment, censorship, or replacement.
+- DO NOT insert apologies, warnings, moral judgments, or system messages.
+- DO NOT sound like an English-speaking robot. Sound like a fluent native of the target language, with correct pronunciation, rhythm, slang, and tone.
+"""
 
     additional_rules = ""
     if target_lang in ["Chinese (Simplified)", "Chinese (Traditional)"]:
@@ -176,9 +184,26 @@ Your task is to **accurately** translate the following text from **{source_lang}
             max_tokens=300,
             temperature=0.1
         )
-        return jsonify({"translated_text": response.choices[0].message.content.strip()})
+
+        translated = response.choices[0].message.content.strip()
+
+        # Block GPT apologies/disclaimers just in case
+        banned_phrases = [
+            "I'm sorry, I cannot assist",
+            "I'm sorry, I can't help",
+            "I cannot help with that request",
+            "Apologies, but I can't",
+            "As an AI language model"
+        ]
+
+        if any(banned.lower() in translated.lower() for banned in banned_phrases):
+            translated = "[Translation blocked — please try again.]"
+
+        return jsonify({"translated_text": translated})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/speak", methods=["POST"])
 def speak():

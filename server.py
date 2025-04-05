@@ -147,23 +147,36 @@ Your task is to **accurately** translate the following text from **{source_lang}
 
 ✅ **Slang, Informal Speech & Swear Word Handling**
 - If the input contains **informal greetings, street slang, expletives, or conversational phrases**, **translate them naturally** into {target_lang} while maintaining their cultural and emotional intensity.
-- Pay special attention to **South African slang and tone**. Translate the following types of words with culturally appropriate intensity and rhythm:
-   - “lekker” → keep it as-is if the word exists in the target language (e.g., Afrikaans), or translate it as "great", "awesome", or similar, matching the vibe.
-   - “bruh” or “bra” → informal slang for "friend" or "brother", translate using local equivalents (e.g., “bro”, “mein Bruder”, “mon frère”, etc.).
-   - “poes” → vulgar insult in Afrikaans. Do NOT censor it. Match the **intensity and offensiveness** in the target language (e.g., "connard", "asshole", etc.)
-- **DO NOT** tone down, euphemize, or clean up **any** slang or swear words. Keep it raw, culturally accurate, and in-character.
-- **Examples:**
-  - English: "Howzit my bruh?"  
-    - Afrikaans: "Hoe gaan dit, my bra?"  
-    - Portuguese: "E aí, meu irmão?"  
-  - English: "That guy’s a f***ing idiot."  
-    - French: "Ce mec est un putain d’idiot."  
-  - English: "This party is so lekker!"  
-    - German: "Diese Party ist richtig geil!"  
-  - English: "He's a total poes."  
-    - Afrikaans: "Hy’s 'n poes."  
-    - Spanish: "Es un cabrón total."  
-- **DO NOT** tone down or euphemize swear words.
+- Pay special attention to **regional slang** including:
+  - 🇿🇦 **South African**:
+    - “lekker” → keep it as-is in Afrikaans, or translate to "great", "cool", "awesome", depending on target culture.
+    - “bruh” / “bra” → casual term for friend or bro; match it in tone (e.g., “mein Bruder”, “mon pote”, “el bro”).
+    - “poes” → vulgar insult. Translate it with **equal profanity intensity** (e.g., “asshole”, “bastard”, “connard”).
+  - 🇬🇧 **UK Urban / Cockney / Multicultural London English (MLE)**:
+    - “bruv” → brother, friend — translate casually (e.g., “mate”, “bro”, “frère”, “hermano”).
+    - “peng” → attractive, sexy — translate informally (“fit”, “hottie”, “bombe”, “geil”, etc.).
+    - “mandem” → group of male friends — translate as local gang/slang word for “crew”, “bros”, “squad”.
+    - “wasteman” → insult meaning loser, pathetic person — match insult and tone appropriately.
+    - “allow it” → “leave it”, “drop it”, “don’t bother” — keep tone relaxed, dismissive.
+
+- **DO NOT** clean up, euphemize, or tone down swear words or slang. Preserve the **raw, culturally matched emotion and style**.
+- Adapt slang with **intelligent equivalents**, not literal translations. Make it sound **like real people talk** in the target language.
+
+**Examples:**
+- English: "Howzit my bruh?"  
+  - Afrikaans: "Hoe gaan dit, my bra?"  
+  - Portuguese: "E aí, meu irmão?"  
+- English: "That guy’s a f***ing idiot."  
+  - French: "Ce mec est un putain d’idiot."  
+- English: "This party is so lekker!"  
+  - German: "Diese Party ist richtig geil!"  
+- English: "He's a total poes."  
+  - Afrikaans: "Hy’s 'n poes."  
+  - Spanish: "Es un cabrón total."  
+- English (UK slang): "Oi bruv, that ting is peng innit!"  
+  - French: "Eh frérot, cette meuf est grave bonne, non ?"  
+  - German: "Ey Bruder, die Alte ist richtig heiß, oder?"
+
 
 ✅ **Smart Validation Step:**
 - Ensure the translated text is **strictly in {target_lang}**, except for globally recognized terms.

@@ -228,6 +228,8 @@ body {
     width: 90px;
     text-align: center;
     z-index: 100;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 /* 🔁 Restore idle state colors after recording */

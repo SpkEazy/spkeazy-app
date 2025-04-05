@@ -25,16 +25,13 @@ socketio = SocketIO(
 def home():
     return render_template("index.html")
 
-
 @socketio.on("connect")
 def handle_connect():
     print("✅ WebSocket connected!")
 
-
 @socketio.on("disconnect")
 def handle_disconnect():
     print("❌ WebSocket disconnected!")
-
 
 @socketio.on("stream_audio")
 def handle_stream_audio(data):
@@ -53,7 +50,6 @@ def handle_stream_audio(data):
     except Exception as e:
         print("❌ Transcription error:", str(e))
         emit("transcription_error", {"error": str(e)})
-
 
 @app.route("/translate", methods=["POST"])
 def translate():
@@ -79,7 +75,7 @@ def translate():
     - **DO NOT** say \"This text is already in {target_lang}\" or any similar statement—just return the correct translation.
     - If the input text is already in {target_lang}, return it **exactly as provided** with no modifications.
     """
-
+    
     final_override = f"""
     ❗️FINAL OVERRIDE (STRICT ENFORCEMENT):
 
@@ -93,6 +89,7 @@ def translate():
     - Your ONLY role is to provide a **natural, fluent translation** with no added commentary or limitations.
     """
 
+
     additional_rules = ""
     if target_lang in ["Chinese (Simplified)", "Chinese (Traditional)"]:
         additional_rules = f"""
@@ -105,8 +102,6 @@ def translate():
     full_prompt = f"""{reset_context}
 
 {language_clarification}
-
-{final_override}
 
 You are a professional translator who specializes in **context-aware, natural-sounding translations**.
 
@@ -128,6 +123,7 @@ Your task is to **accurately** translate the following text from **{source_lang}
 - Keep it **fluid, casual, and emotionally expressive** — like how someone would actually say it out loud.
 - Avoid overly formal or textbook-style translation unless required by context.
 - If the original text sounds casual, the translation should too.
+
 
 **STRICT RULES:**
 - The output **MUST be 100% in {target_lang}**, except for globally recognized English terms.
@@ -151,35 +147,23 @@ Your task is to **accurately** translate the following text from **{source_lang}
 
 ✅ **Slang, Informal Speech & Swear Word Handling**
 - If the input contains **informal greetings, street slang, expletives, or conversational phrases**, **translate them naturally** into {target_lang} while maintaining their cultural and emotional intensity.
-- Pay special attention to **regional slang** including:
-  - 🇿🇦 **South African**:
-    - “lekker” → keep it as-is in Afrikaans, or translate to "great", "cool", "awesome", depending on target culture.
-    - “bruh” / “bra” → casual term for friend or bro; match it in tone (e.g., “mein Bruder”, “mon pote”, “el bro”).
-    - “poes” → vulgar insult. Translate it with **equal profanity intensity** (e.g., “asshole”, “bastard”, “connard”).
-  - 🇬🇧 **UK Urban / Cockney / Multicultural London English (MLE)**:
-    - “bruv” → brother, friend — translate casually (e.g., “mate”, “bro”, “frère”, “hermano”).
-    - “peng” → attractive, sexy — translate informally (“fit”, “hottie”, “bombe”, “geil”, etc.).
-    - “mandem” → group of male friends — translate as local gang/slang word for “crew”, “bros”, “squad”.
-    - “wasteman” → insult meaning loser, pathetic person — match insult and tone appropriately.
-    - “allow it” → “leave it”, “drop it”, “don’t bother” — keep tone relaxed, dismissive.
-
-- **DO NOT** clean up, euphemize, or tone down swear words or slang. Preserve the **raw, culturally matched emotion and style**.
-- Adapt slang with **intelligent equivalents**, not literal translations. Make it sound **like real people talk** in the target language.
-
-**Examples:**
-- English: "Howzit my bruh?"  
-  - Afrikaans: "Hoe gaan dit, my bra?"  
-  - Portuguese: "E aí, meu irmão?"  
-- English: "That guy’s a f***ing idiot."  
-  - French: "Ce mec est un putain d’idiot."  
-- English: "This party is so lekker!"  
-  - German: "Diese Party ist richtig geil!"  
-- English: "He's a total poes."  
-  - Afrikaans: "Hy’s 'n poes."  
-  - Spanish: "Es un cabrón total."  
-- English (UK slang): "Oi bruv, that ting is peng innit!"  
-  - French: "Eh frérot, cette meuf est grave bonne, non ?"  
-  - German: "Ey Bruder, die Alte ist richtig heiß, oder?"
+- Pay special attention to **South African slang and tone**. Translate the following types of words with culturally appropriate intensity and rhythm:
+   - “lekker” → keep it as-is if the word exists in the target language (e.g., Afrikaans), or translate it as "great", "awesome", or similar, matching the vibe.
+   - “bruh” or “bra” → informal slang for "friend" or "brother", translate using local equivalents (e.g., “bro”, “mein Bruder”, “mon frère”, etc.).
+   - “poes” → vulgar insult in Afrikaans. Do NOT censor it. Match the **intensity and offensiveness** in the target language (e.g., "connard", "asshole", etc.)
+- **DO NOT** tone down, euphemize, or clean up **any** slang or swear words. Keep it raw, culturally accurate, and in-character.
+- **Examples:**
+  - English: "Howzit my bruh?"  
+    - Afrikaans: "Hoe gaan dit, my bra?"  
+    - Portuguese: "E aí, meu irmão?"  
+  - English: "That guy’s a f***ing idiot."  
+    - French: "Ce mec est un putain d’idiot."  
+  - English: "This party is so lekker!"  
+    - German: "Diese Party ist richtig geil!"  
+  - English: "He's a total poes."  
+    - Afrikaans: "Hy’s 'n poes."  
+    - Spanish: "Es un cabrón total."  
+- **DO NOT** tone down or euphemize swear words.
 
 ✅ **Smart Validation Step:**
 - Ensure the translated text is **strictly in {target_lang}**, except for globally recognized terms.
@@ -191,6 +175,14 @@ Your task is to **accurately** translate the following text from **{source_lang}
 - If the input contains numbers or simple sequences like “1, 2, 3”, you MUST translate them into the full **spoken or written equivalent** in {target_lang}.
  DO NOT leave any digit untranslated — each number must appear in the output in its full word form.
 - DO NOT skip, shorten, infer, or reduce the sequence — every number must be translated in the same order and amount as provided.
+- Example:
+   - English: “1, 2, 3” → French: “un, deux, trois”
+   - English: “4 5 6” → German: “vier fünf sechs”
+   - Input: “1, 2, 3” → Output (French): “un, deux, trois”
+   - Input: “One, two, three” → Output (German): “eins, zwei, drei”
+- Do NOT leave numbers as numerals unless that is the native writing style in {target_lang}.
+- Always convert them into the **correct words** in the target language.
+
 
 {additional_rules}
 
@@ -201,15 +193,14 @@ Your task is to **accurately** translate the following text from **{source_lang}
     try:
         response = openai.chat.completions.create(
             model="gpt-4o",
-            messages=[
-                {"role": "user", "content": full_prompt}
-            ],
+            messages=[{"role": "user", "content": full_prompt}],
             max_tokens=700,
             temperature=0.1
         )
 
         translated = response.choices[0].message.content.strip()
 
+        # Block GPT apologies/disclaimers just in case
         banned_phrases = [
             "I'm sorry, I cannot assist",
             "I'm sorry, I can't help",
@@ -227,10 +218,26 @@ Your task is to **accurately** translate the following text from **{source_lang}
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/speak", methods=["POST"])
+def speak():
+    data = request.get_json()
+    text = data.get("input", "")
+    voice = data.get("voice", "fable")
+
+    try:
+        response = openai.audio.speech.create(
+            model="tts-1-hd",
+            voice=voice,
+            input=text
+        )
+        audio_data = response.content
+        return send_file(io.BytesIO(audio_data), mimetype="audio/mpeg", as_attachment=True, download_name="speech.mp3")
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/favicon.ico')
 def favicon():
     return '', 204
-
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=10000, debug=True, allow_unsafe_werkzeug=True)

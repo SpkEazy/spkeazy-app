@@ -177,6 +177,26 @@ async function stopRecording(button) {
   }
 }
 
+async function translateText(text, sourceLang, targetLang) {
+  try {
+    const res = await fetch("/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text,
+        source_lang: sourceLang,
+        target_lang: targetLang,
+        gender: selectedGender
+      })
+    });
+    const data = await res.json();
+    return data.translated_text || "";
+  } catch (err) {
+    console.error("❌ Translation failed:", err);
+    document.querySelector(".form-image").classList.remove("recording", "slowing");
+    return "";
+  }
+}
 
 
 

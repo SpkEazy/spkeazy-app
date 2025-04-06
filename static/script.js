@@ -1,7 +1,7 @@
 let socket;
 let mediaRecorder;
 let audioChunks = [];
-let selectedGender = "Neutral";
+let selectedGender = "Female";
 let isOutputMic = false;
 let totalTranscribedTimeSeconds = 0;
 let userIsFree = true; // Track free usage state
@@ -14,6 +14,9 @@ const MAX_FREE_SECONDS = 2 * 60; // 2 minutes = 120 seconds
 window.onload = function () {
     setupDropdown("inputLanguageDropdown", "inputFlag", "inputLanguageText");
     setupDropdown("outputLanguageDropdown", "outputFlag", "outputLanguageText");
+    const savedGender = localStorage.getItem("selectedGender") || "Female";
+    setGender(savedGender);
+
     setupWebSocket();
 };
 
@@ -65,9 +68,22 @@ function toggleGenderDropdown() {
 
 function setGender(gender) {
     selectedGender = gender;
-    document.getElementById("selectedGender").textContent = gender;
-    document.querySelector(".gender-dropdown-menu").style.display = "none";
+
+    const genderText = document.getElementById("selectedGender");
+    if (genderText) {
+        genderText.textContent = gender;
+    }
+
+    const dropdownMenu = document.querySelector(".gender-dropdown-menu");
+    if (dropdownMenu) {
+        dropdownMenu.style.display = "none";
+    }
+
+    localStorage.setItem("selectedGender", gender); // 💾 Save user choice
 }
+
+
+
 
 function setupWebSocket() {
   socket = io.connect();

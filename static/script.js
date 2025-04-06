@@ -6,6 +6,15 @@ let isOutputMic = false;
 let totalTranscribedTimeSeconds = 0;
 let userIsFree = true; // Track free usage state
 const MAX_FREE_SECONDS = 2 * 60; // 2 minutes = 120 seconds
+let userPlan = "free"; // can be "free", "pro", "topup", or "weekend"
+
+const MAX_PRO_DAILY_SECONDS = 5 * 60;
+const MAX_TOPUP_SECONDS = 8.6 * 60;
+const MAX_WEEKEND_DAILY_SECONDS = 17 * 60;
+
+let topUpUsed = false;
+let weekendStart = null;
+
 
 
 
@@ -106,12 +115,52 @@ function setupWebSocket() {
 
     console.log(`⏱️ Estimated usage: +${estimatedSeconds}s (Total: ${totalTranscribedTimeSeconds}s)`);
 
-if (userIsFree && totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
-  userIsFree = false;
-  console.log("🔥 FREE LIMIT REACHED - Showing pricing toast");
-  showPricingToast(); // 🔥 Show upgrade toast
-  return; // ⛔️ Stop further transcription
+const now = new Date();
+let limitReached = false;
+
+if (userPlan === "free") {
+  if (totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
+    userIsFree = false;
+    limitReached = true;
+  }
+} else if (userPlan === "pro") {
+  const todayKey = `pro_usage_${now.toDateString()}`;
+  const todaySeconds = parseFloat(localStorage.getItem(todayKey) || "0");
+  if (todaySeconds + estimatedSeconds > MAX_PRO_DAILY_SECONDS) {
+    limitReached = true;
+  } else {
+    localStorage.setItem(todayKey, todaySeconds + estimatedSeconds);
+  }
+} else if (userPlan === "topup") {
+  const used = parseFloat(localStorage.getItem("topup_seconds") || "0");
+  if (used + estimatedSeconds > MAX_TOPUP_SECONDS) {
+    limitReached = true;
+  } else {
+    localStorage.setItem("topup_seconds", used + estimatedSeconds);
+  }
+} else if (userPlan === "weekend") {
+  if (!weekendStart) weekendStart = now.getTime();
+  const msSinceStart = now.getTime() - weekendStart;
+  const daysPassed = Math.floor(msSinceStart / (24 * 60 * 60 * 1000));
+  if (daysPassed >= 3) {
+    limitReached = true;
+  } else {
+    const key = `weekend_day${daysPassed}_usage`;
+    const used = parseFloat(localStorage.getItem(key) || "0");
+    if (used + estimatedSeconds > MAX_WEEKEND_DAILY_SECONDS) {
+      limitReached = true;
+    } else {
+      localStorage.setItem(key, used + estimatedSeconds);
+    }
+  }
 }
+
+if (limitReached) {
+  console.log("🔥 PAID PLAN LIMIT REACHED - Showing toast");
+  showPricingToast();
+  return;
+}
+
 
 
     const translated = await translateText(data.text, sourceLang, targetLang);
@@ -335,11 +384,19 @@ function selectPlan(planType) {
 }
 
 
-function grantTokensOrResetLimit() {
-  userIsFree = true;
+function grantTokensOrResetLimit(plan = "free") {
+  userPlan = plan;
   totalTranscribedTimeSeconds = 0;
+  if (plan === "topup") {
+    localStorage.setItem("topup_seconds", "0");
+  } else if (plan === "weekend") {
+    weekendStart = Date.now();
+    for (let i = 0; i < 3; i++) {
+      localStorage.setItem(`weekend_day${i}_usage`, "0");
+    }
+  }
   hidePricingToast();
-  console.log("✅ Limit reset: user granted access again");
+  console.log(`✅ Limit reset: user granted access again for ${plan}`);
 }
 
 

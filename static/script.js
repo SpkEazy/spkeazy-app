@@ -22,6 +22,14 @@ function setupDropdown(dropdownId, flagId, textId) {
     const selected = dropdown.querySelector(".selected");
     const dropdownMenu = dropdown.querySelector(".dropdown-menu");
 
+    // 🔁 Load saved language on startup
+    const savedText = localStorage.getItem(textId);
+    const savedFlag = localStorage.getItem(flagId);
+    if (savedText && savedFlag) {
+        document.getElementById(flagId).src = `https://flagcdn.com/w40/${savedFlag}.png`;
+        document.getElementById(textId).textContent = savedText;
+    }
+
     selected.addEventListener("click", (event) => {
         event.stopPropagation();
         dropdownMenu.style.display = dropdownMenu.style.display === "flex" ? "none" : "flex";
@@ -29,9 +37,16 @@ function setupDropdown(dropdownId, flagId, textId) {
 
     dropdownMenu.querySelectorAll("div").forEach(option => {
         option.addEventListener("click", () => {
-            document.getElementById(flagId).src = `https://flagcdn.com/w40/${option.dataset.flag}.png`;
-            document.getElementById(textId).textContent = option.textContent.trim();
+            const flagCode = option.dataset.flag;
+            const langText = option.textContent.trim();
+
+            document.getElementById(flagId).src = `https://flagcdn.com/w40/${flagCode}.png`;
+            document.getElementById(textId).textContent = langText;
             dropdownMenu.style.display = "none";
+
+            // 💾 Save selected language to localStorage
+            localStorage.setItem(textId, langText);
+            localStorage.setItem(flagId, flagCode);
         });
     });
 
@@ -41,6 +56,7 @@ function setupDropdown(dropdownId, flagId, textId) {
         }
     });
 }
+
 
 function toggleGenderDropdown() {
     const menu = document.querySelector(".gender-dropdown-menu");

@@ -61,6 +61,8 @@ function setupWebSocket() {
   });
 
   socket.on("transcription_result", async (data) => {
+    await requestWakeLock(); //🔋 Keep screen awake during translation + speech
+
     const inputLang = document.getElementById("inputLanguageText").textContent.trim();
     const outputLang = document.getElementById("outputLanguageText").textContent.trim();
     const sourceLang = isOutputMic ? outputLang : inputLang;
@@ -178,47 +180,41 @@ async function stopRecording(button) {
 
 
 
-async function translateText(text, sourceLang, targetLang) {
-    try {
-        const res = await fetch("/translate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                text,
-                source_lang: sourceLang,
-                target_lang: targetLang,
-                gender: selectedGender
-            })
-        });
-        const data = await res.json();
-        return data.translated_text || "";
-    } catch (err) {
-        console.error("❌ Translation failed:", err);
-        document.querySelector(".form-image").classList.remove("recording", "slowing");
-        return "";
-    }
-}
-
 async function speakText(text) {
-    let voiceModel = "fable";
-    if (selectedGender === "Male") voiceModel = "onyx";
-    else if (selectedGender === "Female") voiceModel = "nova";
+  let voiceModel = "fable";
+  if (selectedGender === "Male") voiceModel = "onyx";
+  else if (selectedGender === "Female") voiceModel = "nova";
 
-    try {
-        const response = await fetch("/speak", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ input: text, voice: voiceModel })
-        });
+  try {
+    const response = await fetch("/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input: text, voice: voiceModel })
+    });
 
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audio = new Audio(audioUrl);
-        setTimeout(() => audio.play(), 150);
-    } catch (err) {
-        console.error("❌ Speech generation failed:", err);
-    }
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+
+    await requestWakeLock(); // 🔋 Lock screen during speech
+
+    setTimeout(() => audio.play(), 150);
+
+    // Release wake lock after audio ends
+    audio.onended = () => {
+      releaseWakeLock();
+    };
+
+    audio.onerror = () => {
+      releaseWakeLock(); // Fallback in case of error
+    };
+
+  } catch (err) {
+    console.error("❌ Speech generation failed:", err);
+    releaseWakeLock(); // Fail-safe release
+  }
 }
+
 
 document.addEventListener("click", function (e) {
     const dropdown = document.querySelector(".gender-dropdown");

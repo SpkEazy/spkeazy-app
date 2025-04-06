@@ -146,6 +146,8 @@ async function startRecording(button) {
         };
 
         mediaRecorder.start();
+        await requestWakeLock();
+
     } catch (err) {
         console.error("❌ Microphone access error:", err);
         alert("Microphone access is blocked or denied.");
@@ -154,7 +156,7 @@ async function startRecording(button) {
     }
 }
 
-function stopRecording(button) {
+async function stopRecording(button) {
   button.classList.remove("recording");
 
   // ✨ Reset idle styles using CSS classes
@@ -168,6 +170,8 @@ function stopRecording(button) {
 
   if (mediaRecorder && mediaRecorder.state !== "inactive") {
     mediaRecorder.stop();
+    await releaseWakeLock();
+
   }
 }
 
@@ -298,6 +302,38 @@ window.addEventListener("load", () => {
     setTimeout(() => splash.style.display = "none", 800);
   }, 1500); // You can increase to 2000–3000ms for longer splash
 });
+
+
+// 🔋 WAKE LOCK SUPPORT
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log("🔋 Wake lock is active");
+      wakeLock.addEventListener('release', () => {
+        console.log("🔓 Wake lock released");
+      });
+    } else {
+      console.warn("🚫 Wake Lock API is not supported on this browser");
+    }
+  } catch (err) {
+    console.error("❌ Wake lock request failed:", err);
+  }
+}
+
+async function releaseWakeLock() {
+  try {
+    if (wakeLock !== null) {
+      await wakeLock.release();
+      wakeLock = null;
+    }
+  } catch (err) {
+    console.error("❌ Wake lock release failed:", err);
+  }
+}
+
 
 
 

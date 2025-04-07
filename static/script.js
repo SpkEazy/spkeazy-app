@@ -6,7 +6,21 @@ let isOutputMic = false;
 let totalTranscribedTimeSeconds = 0;
 let userIsFree = true; // Track free usage state
 const MAX_FREE_SECONDS = 2 * 60; // 2 minutes = 120 seconds
-let userPlan = "free"; // can be "free", "pro", "topup", or "weekend"
+let userPlan = localStorage.getItem("userPlan") || "free";
+const planGrantedAt = parseInt(localStorage.getItem("planGrantedAt"), 10);
+const now = Date.now();
+
+if (userPlan === "free" && planGrantedAt) {
+  const hoursPassed = (now - planGrantedAt) / (1000 * 60 * 60);
+  if (hoursPassed >= 24) {
+    localStorage.setItem("userPlan", "free");
+    localStorage.setItem("planGrantedAt", now.toString());
+    userPlan = "free";
+    totalTranscribedTimeSeconds = 0;
+    console.log("🔄 Reset free plan after 24 hours");
+  }
+}
+
 
 const MAX_PRO_DAILY_SECONDS = 5 * 60;
 const MAX_TOPUP_SECONDS = 8.6 * 60;
@@ -386,7 +400,10 @@ function selectPlan(planType) {
 
 function grantTokensOrResetLimit(plan = "free") {
   userPlan = plan;
+  localStorage.setItem("userPlan", plan);
+  localStorage.setItem("planGrantedAt", Date.now().toString());
   totalTranscribedTimeSeconds = 0;
+
   if (plan === "topup") {
     localStorage.setItem("topup_seconds", "0");
   } else if (plan === "weekend") {

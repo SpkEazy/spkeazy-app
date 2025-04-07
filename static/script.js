@@ -15,8 +15,8 @@ const MAX_WEEKEND_DAILY_SECONDS = 17 * 60;
 let topUpUsed = false;
 let weekendStart = null;
 
-
-
+const COOLDOWN_PERIOD_MS = 24 * 60 * 60 * 1000;
+let cooldownStartTime = parseInt(localStorage.getItem("cooldownStartTime") || "0");
 
 
 
@@ -27,6 +27,19 @@ window.onload = function () {
     setGender(savedGender);
 
     setupWebSocket();
+
+    if (userPlan === "free" && cooldownStartTime > 0) {
+  const now = Date.now();
+  if (now - cooldownStartTime < COOLDOWN_PERIOD_MS) {
+    showPricingToast(); // ⏳ Still in cooldown, show toast
+  } else {
+    // ⏱️ Cooldown expired, reset everything
+    localStorage.removeItem("cooldownStartTime");
+    totalTranscribedTimeSeconds = 0;
+    console.log("🔁 Free tier reset after cooldown");
+  }
+}
+
 };
 
 function setupDropdown(dropdownId, flagId, textId) {
@@ -119,10 +132,19 @@ const now = new Date();
 let limitReached = false;
 
 if (userPlan === "free") {
-  if (totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
-    userIsFree = false;
+  const nowMs = Date.now();
+  if (cooldownStartTime && nowMs - cooldownStartTime < COOLDOWN_PERIOD_MS) {
     limitReached = true;
+  } else {
+    if (totalTranscribedTimeSeconds >= MAX_FREE_SECONDS) {
+      userIsFree = false;
+      limitReached = true;
+      cooldownStartTime = nowMs;
+      localStorage.setItem("cooldownStartTime", cooldownStartTime.toString());
+    }
   }
+}
+
 } else if (userPlan === "pro") {
   const todayKey = `pro_usage_${now.toDateString()}`;
   const todaySeconds = parseFloat(localStorage.getItem(todayKey) || "0");
@@ -387,6 +409,8 @@ function selectPlan(planType) {
 function grantTokensOrResetLimit(plan = "free") {
   userPlan = plan;
   totalTranscribedTimeSeconds = 0;
+  localStorage.removeItem("cooldownStartTime");
+
   if (plan === "topup") {
     localStorage.setItem("topup_seconds", "0");
   } else if (plan === "weekend") {
@@ -395,9 +419,11 @@ function grantTokensOrResetLimit(plan = "free") {
       localStorage.setItem(`weekend_day${i}_usage`, "0");
     }
   }
+
   hidePricingToast();
   console.log(`✅ Limit reset: user granted access again for ${plan}`);
 }
+
 
 
 window.addEventListener("load", () => {

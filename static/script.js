@@ -387,7 +387,12 @@ function selectPlan(planType) {
 function grantTokensOrResetLimit(plan = "free") {
   userPlan = plan;
   totalTranscribedTimeSeconds = 0;
-  if (plan === "topup") {
+
+  if (plan === "pro") {
+    const todayKey = `pro_usage_${new Date().toDateString()}`;
+    localStorage.setItem(todayKey, "0");
+    console.log("✅ Pro subscription: daily limit initialized");
+  } else if (plan === "topup") {
     localStorage.setItem("topup_seconds", "0");
   } else if (plan === "weekend") {
     weekendStart = Date.now();
@@ -395,9 +400,11 @@ function grantTokensOrResetLimit(plan = "free") {
       localStorage.setItem(`weekend_day${i}_usage`, "0");
     }
   }
+
   hidePricingToast();
   console.log(`✅ Limit reset: user granted access again for ${plan}`);
 }
+
 
 
 window.addEventListener("load", () => {

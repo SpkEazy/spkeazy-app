@@ -26,7 +26,7 @@ window.onload = function () {
     const savedGender = localStorage.getItem("selectedGender") || "Female";
     setGender(savedGender);
 
-    setupWebSocket();
+
 };
 
 function setupDropdown(dropdownId, flagId, textId) {
@@ -404,9 +404,19 @@ window.addEventListener("load", () => {
   const splash = document.getElementById("splash-screen");
   setTimeout(() => {
     splash.style.opacity = "0";
-    setTimeout(() => splash.style.display = "none", 800);
-  }, 1500); // You can increase to 2000–3000ms for longer splash
+    setTimeout(() => {
+      splash.style.display = "none";
+
+      // ✅ After splash fades, connect to WebSocket
+      setupWebSocket();
+
+      // ✅ Also move mic permission request after splash, for smoothness
+      requestMicrophonePermissionEarly();
+      
+    }, 800);
+  }, 1500);
 });
+
 
 
 // 🔋 WAKE LOCK SUPPORT

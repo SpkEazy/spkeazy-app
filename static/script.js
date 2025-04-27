@@ -21,6 +21,11 @@ let weekendStart = null;
 
 
 window.onload = function () {
+  if (isUserBlocked()) {
+  console.log("🛑 User is blocked, showing pricing immediately");
+  showPricingToast();
+  return;
+}
     setupDropdown("inputLanguageDropdown", "inputFlag", "inputLanguageText");
     setupDropdown("outputLanguageDropdown", "outputFlag", "outputLanguageText");
     const savedGender = localStorage.getItem("selectedGender") || "Female";
@@ -92,6 +97,18 @@ function setGender(gender) {
 }
 
 
+function isUserBlocked() {
+  const blockedUntil = parseInt(localStorage.getItem('blockedUntil') || "0");
+  return Date.now() < blockedUntil;
+}
+
+function blockUserFor24Hours() {
+  const blockDurationMs = 24 * 60 * 60 * 1000; // 24 hours in ms
+  localStorage.setItem('blockedUntil', (Date.now() + blockDurationMs).toString());
+}
+
+
+
 
 
 function setupWebSocket() {
@@ -156,12 +173,11 @@ if (userPlan === "free") {
 }
 
 if (limitReached) {
-  console.log("🔥 PAID PLAN LIMIT REACHED - Showing toast");
-  showPricingToast();
+  console.log("🔥 PAID PLAN LIMIT REACHED - Blocking user");
+  blockUserFor24Hours(); // ✅ Block for 24h
+  showPricingToast();    // ✅ Show the toast
   return;
 }
-
-
 
     const translated = await translateText(data.text, sourceLang, targetLang);
     await speakText(translated);

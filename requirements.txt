@@ -1,4 +1,5 @@
-flask 
-openai 
+flask
+openai
 python-dotenv
-flask-socketio
+flask_socketio
+flask-cors

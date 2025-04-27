@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, send_file
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 import openai
 import os
 import io
@@ -12,6 +13,7 @@ if not OPENAI_API_KEY:
     raise ValueError("❌ OpenAI API key is missing!")
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+CORS(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",

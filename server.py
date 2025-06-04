@@ -69,6 +69,16 @@ def translate():
 
     reset_context = "Forget all previous instructions. Reset memory completely. This is a new translation request."
 
+    speed_priority = """
+    ⏱️ SPEED PRIORITY:
+
+    - You must deliver the translated response as **fast as possible**.
+    - Perform all necessary contextual and emotional interpretation **quickly and efficiently**.
+    - DO NOT delay for deeper analysis or extra validation steps.
+    - Prioritize immediacy: produce a fluent, natural translation at your **fastest speed** without sacrificing accuracy.
+   """
+
+    
     language_clarification = f"""
     IMPORTANT: You are translating from **{source_lang}** to **{target_lang}**.
     - The **source language** is **EXACTLY** {source_lang}. Assume it is correctly detected and DO NOT re-evaluate.
@@ -102,6 +112,8 @@ def translate():
         """
 
     full_prompt = f"""{reset_context}
+
+    {speed_priority}
 
 {language_clarification}
 

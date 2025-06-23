@@ -3,3 +3,4 @@ openai
 python-dotenv
 flask_socketio
 flask-cors
+requests

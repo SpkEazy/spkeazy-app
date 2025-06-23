@@ -266,8 +266,48 @@ def speak():
 def favicon():
     return '', 204
 
+import threading
+import time
+import requests
+
+def warm_openai():
+    print("🔥 Warming up OpenAI endpoints...")
+    try:
+        # Warm up GPT-4o
+        openai.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": "Say hello"}],
+            max_tokens=5,
+            temperature=0
+        )
+
+        # Warm up Whisper with a dummy WAV header
+        dummy_audio = io.BytesIO(b"RIFF$\x00\x00\x00WAVEfmt ")
+        dummy_audio.name = "warmup.wav"
+        openai.audio.transcriptions.create(
+            model="whisper-1",
+            file=dummy_audio
+        )
+
+        print("✅ OpenAI models warmed.")
+    except Exception as e:
+        print("⚠️ OpenAI warmup failed:", str(e))
+
+def keep_alive():
+    while True:
+        try:
+            requests.get("https://spkeazy.onrender.com")
+            print("🔄 Keep-alive ping sent")
+        except Exception as e:
+            print("❌ Keep-alive ping failed:", e)
+        time.sleep(600)  # every 10 minutes
+
+
 if __name__ == "__main__":
+    warm_openai()  # 🔥 Preload OpenAI models
+    threading.Thread(target=keep_alive, daemon=True).start()  # 🟢 Prevent server cold sleep
     socketio.run(app, host="0.0.0.0", port=10000, debug=True, allow_unsafe_werkzeug=True)
+
 
 
 

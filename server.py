@@ -270,6 +270,8 @@ import threading
 import time
 import requests
 
+
+
 def warm_openai():
     print("🔥 Warming up OpenAI endpoints...")
     try:
@@ -281,13 +283,12 @@ def warm_openai():
             temperature=0
         )
 
-        # Warm up Whisper with a dummy WAV header
-        dummy_audio = io.BytesIO(b"RIFF$\x00\x00\x00WAVEfmt ")
-        dummy_audio.name = "warmup.wav"
-        openai.audio.transcriptions.create(
-            model="whisper-1",
-            file=dummy_audio
-        )
+        # ✅ This must be indented inside the `try:` block
+        with open("static/silence.wav", "rb") as audio_file:
+            openai.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file
+            )
 
         print("✅ OpenAI models warmed.")
     except Exception as e:

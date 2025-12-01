@@ -42,8 +42,9 @@ def handle_stream_audio(data):
         audio_bytes.name = "audio.wav"
 
         response = openai.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_bytes
+            model="gpt-4o-transcribe",
+            file=audio_bytes,
+            response_format="text"
         )
 
         print("✅ Transcription:", response.text)
@@ -253,7 +254,7 @@ def speak():
 
     try:
         response = openai.audio.speech.create(
-            model="tts-1-hd",
+            model="gpt-4o-mini-tts",  # 🆕 new mouth
             voice=voice,
             input=text
         )
@@ -286,7 +287,7 @@ def warm_openai():
         # ✅ This must be indented inside the `try:` block
         with open("static/silence.wav", "rb") as audio_file:
             openai.audio.transcriptions.create(
-                model="whisper-1",
+                model="gpt-4o-transcribe",  # 🆕 new ear
                 file=audio_file
             )
 
@@ -308,6 +309,7 @@ if __name__ == "__main__":
     warm_openai()  # 🔥 Preload OpenAI models
     threading.Thread(target=keep_alive, daemon=True).start()  # 🟢 Prevent server cold sleep
     socketio.run(app, host="0.0.0.0", port=10000, debug=True, allow_unsafe_werkzeug=True)
+
 
 
 
